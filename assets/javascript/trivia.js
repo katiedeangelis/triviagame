@@ -8,6 +8,8 @@
 //Wait a few seconds, then show the next question.
 //On the final screen, show the number of correct answers, incorrect answers, and an option to restart the game (without reloading the page).
 
+var triviaQuestionChosen;
+
 function triviaQuestionGenerator(question, id, correctanswer, answertwo, answerthree, answerfour) {
     this.question = question;
     this.id = id;
@@ -94,12 +96,9 @@ function triviaGameReset() {
 
     triviaGameQuestions = [indianaJones, sayAnything, vacation, dontYou, princessBride, ferrisBueller, splash, backToTheFuture, caddyShack, extraTerrestrial];
 
-    jQuery.each(triviaGameQuestions, function (i, gameobject) {
-        $(".trivia-game-question").append(gameobject.getQuestion());
-        $(".trivia-game-answers").append(gameobject.getAnswers());
-    });
+    triviaQuestionChosen = triviaGameQuestions[Math.floor(Math.random() * triviaGameQuestions.length)];
+        $(".trivia-game-question").html(triviaQuestionChosen.getQuestion());
+        $(".trivia-game-answers").html(triviaQuestionChosen.getAnswers());
 }
 
-function startTriviaGame(event) {
-$(".start-button").on("click", triviaGameReset);
-}
+$(window).click(triviaGameReset)
