@@ -99,3 +99,7 @@ function triviaGameReset() {
         $(".trivia-game-answers").append(gameobject.getAnswers());
     });
 }
+
+function startTriviaGame(event) {
+$(".start-button").on("click", triviaGameReset);
+}
