@@ -9,6 +9,9 @@
 //On the final screen, show the number of correct answers, incorrect answers, and an option to restart the game (without reloading the page).
 
 var triviaQuestionChosen;
+var triviaGameQuestions = [];
+var triviaQuestionGuessed = [];
+var correctAnswers;
 
 function triviaQuestionGenerator(question, id, correctanswer, answertwo, answerthree, answerfour) {
     this.question = question;
@@ -24,15 +27,29 @@ function triviaQuestionGenerator(question, id, correctanswer, answertwo, answert
     }
     this.getAnswers = function() {
         var newTriviaAnswers = $("<div class='trivia-answer-tile' id='" + this.id + "'>");
-        $(newTriviaAnswers).append('<h3>' + this.correctanswer + '</h3>')
-        $(newTriviaAnswers).append('<h3>' + this.answertwo + '</h3>')
-        $(newTriviaAnswers).append('<h3>' + this.answerthree + '</h3>')
-        $(newTriviaAnswers).append('<h3>' + this.answerfour + '</h3>')
+
+        var ans1 = $('<button>' + this.correctanswer + '</button>')
+        ans1.on("click", guess);
+        $(newTriviaAnswers).append(ans1);
+
+        var ans2 = $('<button>' + this.answertwo + '</button>')
+        ans2.on("click", guess);
+        $(newTriviaAnswers).append(ans2);
+
+        $(newTriviaAnswers).append('<button>' + this.answerthree + '</button>')
+        $(newTriviaAnswers).append('<button>' + this.answerfour + '</button>')
         return newTriviaAnswers;
     }
 }
 
 function triviaGameReset() {
+
+    correctAnswers = 0;
+    triviaQuestionGuessed = [];
+
+    $(".start-button").on("click", newQuestion);
+    $(".play-again-button").hide();
+
     var indianaJones = new triviaQuestionGenerator("In Indiana Jones and the Last Crusade, we learn that Indy's real name is what?",
         "henry",
         "Henry",
@@ -96,9 +113,30 @@ function triviaGameReset() {
 
     triviaGameQuestions = [indianaJones, sayAnything, vacation, dontYou, princessBride, ferrisBueller, splash, backToTheFuture, caddyShack, extraTerrestrial];
 
-    triviaQuestionChosen = triviaGameQuestions[Math.floor(Math.random() * triviaGameQuestions.length)];
-        $(".trivia-game-question").html(triviaQuestionChosen.getQuestion());
-        $(".trivia-game-answers").html(triviaQuestionChosen.getAnswers());
 }
 
-$(window).click(triviaGameReset)
+function newQuestion (e) {
+    $(".start-button").hide();
+    if (triviaGameQuestions.length <= 0) {
+        $(".trivia-game-question").empty();
+        $(".trivia-game-answers").empty();
+        $(".play-again-button").show();    
+        $(".play-again-button").on("click", triviaGameReset);    
+    } else {
+    triviaQuestionChosen = triviaGameQuestions.pop();
+    triviaQuestionGuessed.push(triviaQuestionChosen);
+    $(".trivia-game-question").html(triviaQuestionChosen.getQuestion());
+    $(".trivia-game-answers").html(triviaQuestionChosen.getAnswers());
+    }
+
+}
+
+function guess (e) {
+    if (triviaQuestionChosen.correctanswer === e.currentTarget.innerHTML) {
+        correctAnswers += 1;
+        $(".correct").text("Correct: " + correctAnswers);
+    }
+    newQuestion();
+}
+
+$(window).load(triviaGameReset)
