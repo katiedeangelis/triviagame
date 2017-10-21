@@ -36,17 +36,28 @@ function triviaQuestionGenerator(question, id, correctanswer, answertwo, answert
         ans2.on("click", guess);
         $(newTriviaAnswers).append(ans2);
 
-        $(newTriviaAnswers).append('<button>' + this.answerthree + '</button>')
+        var ans3 = $('<button>' + this.answerthree + '</button>')
+        ans3.on("click", guess);
+        $(newTriviaAnswers).append(ans3);
+
         $(newTriviaAnswers).append('<button>' + this.answerfour + '</button>')
+        var ans4 = $('<button>' + this.answerfour + '</button>')
+        ans4.on("click", guess);
+        $(newTriviaAnswers).append(ans4);
+
         return newTriviaAnswers;
     }
 }
+
+
 
 function triviaGameReset() {
 
     correctAnswers = 0;
     triviaQuestionGuessed = [];
 
+    $(".correct").text("Correct: " + correctAnswers);    
+    
     $(".start-button").on("click", newQuestion);
     $(".play-again-button").hide();
 
@@ -121,7 +132,8 @@ function newQuestion (e) {
         $(".trivia-game-question").empty();
         $(".trivia-game-answers").empty();
         $(".play-again-button").show();    
-        $(".play-again-button").on("click", triviaGameReset);    
+        $(".play-again-button").on("click", triviaGameReset); 
+        $(".play-again-button").on("click", newQuestion);   
     } else {
     triviaQuestionChosen = triviaGameQuestions.pop();
     triviaQuestionGuessed.push(triviaQuestionChosen);
