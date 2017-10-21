@@ -12,6 +12,8 @@ var triviaQuestionChosen;
 var triviaGameQuestions = [];
 var triviaQuestionGuessed = [];
 var correctAnswers;
+var interval;
+var time;
 
 function triviaQuestionGenerator(question, id, correctanswer, answertwo, answerthree, answerfour) {
     this.question = question;
@@ -20,12 +22,12 @@ function triviaQuestionGenerator(question, id, correctanswer, answertwo, answert
     this.answertwo = answertwo;
     this.answerthree = answerthree;
     this.answerfour = answerfour;
-    this.getQuestion = function() {
+    this.getQuestion = function () {
         var newTriviaQuestion = $("<div class='trivia-question-tile' id='" + this.id + "'>");
         $(newTriviaQuestion).append('<h1>' + this.question + '</h1>')
         return newTriviaQuestion;
     }
-    this.getAnswers = function() {
+    this.getAnswers = function () {
         var newTriviaAnswers = $("<div class='trivia-answer-tile' id='" + this.id + "'>");
 
         var ans1 = $('<button>' + this.correctanswer + '</button>')
@@ -56,8 +58,8 @@ function triviaGameReset() {
     correctAnswers = 0;
     triviaQuestionGuessed = [];
 
-    $(".correct").text("Correct: " + correctAnswers);    
-    
+    $(".correct").text("Correct: " + correctAnswers);
+
     $(".start-button").on("click", newQuestion);
     $(".play-again-button").hide();
 
@@ -126,24 +128,35 @@ function triviaGameReset() {
 
 }
 
-function newQuestion (e) {
+function newQuestion(e) {
+    timer = 10;
     $(".start-button").hide();
+    clearInterval(interval);
     if (triviaGameQuestions.length <= 0) {
         $(".trivia-game-question").empty();
         $(".trivia-game-answers").empty();
-        $(".play-again-button").show();    
-        $(".play-again-button").on("click", triviaGameReset); 
-        $(".play-again-button").on("click", newQuestion);   
+        $(".time-left").empty();
+        $(".play-again-button").show();
+        $(".play-again-button").on("click", triviaGameReset);
+        $(".play-again-button").on("click", newQuestion);
     } else {
-    triviaQuestionChosen = triviaGameQuestions.pop();
-    triviaQuestionGuessed.push(triviaQuestionChosen);
-    $(".trivia-game-question").html(triviaQuestionChosen.getQuestion());
-    $(".trivia-game-answers").html(triviaQuestionChosen.getAnswers());
+        $(".time-left").text(timer);
+        triviaQuestionChosen = triviaGameQuestions.pop();
+        triviaQuestionGuessed.push(triviaQuestionChosen);
+        $(".trivia-game-question").html(triviaQuestionChosen.getQuestion());
+        $(".trivia-game-answers").html(triviaQuestionChosen.getAnswers());
+        interval = setInterval(function () {
+            timer -= 1;
+            $(".time-left").text(timer);
+            if (timer <= 0) {
+                newQuestion();
+            }
+        }, 1000)
     }
 
 }
 
-function guess (e) {
+function guess(e) {
     if (triviaQuestionChosen.correctanswer === e.currentTarget.innerHTML) {
         correctAnswers += 1;
         $(".correct").text("Correct: " + correctAnswers);
