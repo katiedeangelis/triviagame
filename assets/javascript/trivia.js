@@ -173,7 +173,11 @@ function newQuestion(e) {
             timer -= 1;
             $(".time-left").text(timer);
             if (timer <= 0) {
-                newQuestion();
+                incorrectAnswers += 1;
+                $(".incorrect").text("Incorrect: " + incorrectAnswers); 
+                $(".trivia-game-answers").addClass("show-answer");                
+                clearInterval(interval);
+                setTimeout(newQuestion, 2000);
             }
         }, 1000)
     }
@@ -186,9 +190,8 @@ function guess(e) {
         correctAnswers += 1;
         $(".correct").text("Correct: " + correctAnswers);
     } else {
-        $(e.currentTarget).addClass("incorrect-guess");
         incorrectAnswers += 1;
-        $(".incorrect").text("Incorrect: " + incorrectAnswers);
+        $(".incorrect").text("Incorrect: " + incorrectAnswers); 
     }
     $(".trivia-game-answers").addClass("show-answer");
     clearInterval(interval);
