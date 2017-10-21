@@ -81,6 +81,8 @@ function triviaGameReset() {
 
     $(".start-button").on("click", newQuestion);
     $(".play-again-button").hide();
+    $(".correct").hide();
+    $(".incorrect").hide();    
 
     var indianaJones = new triviaQuestionGenerator("In Indiana Jones and the Last Crusade, we learn that Indy's real name is what?",
         "henry",
@@ -150,6 +152,8 @@ function triviaGameReset() {
 function newQuestion(e) {
     timer = 10;
     $(".start-button").hide();
+    $(".correct").show();
+    $(".incorrect").show();  
     $(".trivia-game-answers").removeClass("show-answer");
     clearInterval(interval);
     if (triviaGameQuestions.length <= 0) {
@@ -177,6 +181,7 @@ function newQuestion(e) {
 }
 
 function guess(e) {
+    $(e.currentTarget).off("click", guess);
     if (triviaQuestionChosen.correctanswer === e.currentTarget.innerHTML) {
         correctAnswers += 1;
         $(".correct").text("Correct: " + correctAnswers);
@@ -191,3 +196,6 @@ function guess(e) {
 }
 
 $(window).load(triviaGameReset)
+
+//TODO: Show correct answer if none is guessed
+//TODO: Count the time running out with no guess as an incorrect guess

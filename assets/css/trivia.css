@@ -6,6 +6,7 @@
     background-color: #f07474;
 }
 
+body,
 .trivia-answer-tile {
     display: flex;
     flex-direction: column;
@@ -14,6 +15,12 @@
 
 .trivia-answer-tile button {
     width: 300px;
+    padding: 10px;
+    margin: 10px;
+}
+
+#trivia-game-intro {
+    width: 75%;
     padding: 10px;
     margin: 10px;
 }
