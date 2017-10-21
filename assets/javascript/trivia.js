@@ -12,6 +12,7 @@ var triviaQuestionChosen;
 var triviaGameQuestions = [];
 var triviaQuestionGuessed = [];
 var correctAnswers;
+var incorrectAnswers;
 var interval;
 var time;
 
@@ -30,7 +31,7 @@ function triviaQuestionGenerator(question, id, correctanswer, answertwo, answert
     this.getAnswers = function () {
         var newTriviaAnswers = $("<div class='trivia-answer-tile' id='" + this.id + "'>");
 
-        var ans1 = $('<button>' + this.correctanswer + '</button>')
+        var ans1 = $('<button class="correct-guess">' + this.correctanswer + '</button>')
         ans1.on("click", guess);
         $(newTriviaAnswers).append(ans1);
 
@@ -42,7 +43,6 @@ function triviaQuestionGenerator(question, id, correctanswer, answertwo, answert
         ans3.on("click", guess);
         $(newTriviaAnswers).append(ans3);
 
-        $(newTriviaAnswers).append('<button>' + this.answerfour + '</button>')
         var ans4 = $('<button>' + this.answerfour + '</button>')
         ans4.on("click", guess);
         $(newTriviaAnswers).append(ans4);
@@ -56,9 +56,11 @@ function triviaQuestionGenerator(question, id, correctanswer, answertwo, answert
 function triviaGameReset() {
 
     correctAnswers = 0;
+    incorrectAnswers = 0;
     triviaQuestionGuessed = [];
 
     $(".correct").text("Correct: " + correctAnswers);
+    $(".incorrect").text("Incorrect: " + incorrectAnswers);
 
     $(".start-button").on("click", newQuestion);
     $(".play-again-button").hide();
@@ -131,6 +133,7 @@ function triviaGameReset() {
 function newQuestion(e) {
     timer = 10;
     $(".start-button").hide();
+    $(".trivia-game-answers").removeClass("show-answer");    
     clearInterval(interval);
     if (triviaGameQuestions.length <= 0) {
         $(".trivia-game-question").empty();
@@ -160,8 +163,14 @@ function guess(e) {
     if (triviaQuestionChosen.correctanswer === e.currentTarget.innerHTML) {
         correctAnswers += 1;
         $(".correct").text("Correct: " + correctAnswers);
+    } else{
+        $(e.currentTarget).addClass("incorrect-guess");
+        incorrectAnswers += 1;
+        $(".incorrect").text("Incorrect: " + incorrectAnswers);
     }
-    newQuestion();
+    $(".trivia-game-answers").addClass("show-answer");
+    clearInterval(interval);    
+    setTimeout(newQuestion, 2000);
 }
 
 $(window).load(triviaGameReset)

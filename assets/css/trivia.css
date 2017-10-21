@@ -1,0 +1,7 @@
+.show-answer .correct-guess {
+    background-color: #b6f074;
+}
+
+.show-answer .incorrect-guess {
+    background-color: #f07474;
+}
