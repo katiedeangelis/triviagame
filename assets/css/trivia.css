@@ -5,3 +5,15 @@
 .show-answer .incorrect-guess {
     background-color: #f07474;
 }
+
+.trivia-answer-tile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.trivia-answer-tile button {
+    width: 300px;
+    padding: 10px;
+    margin: 10px;
+}
