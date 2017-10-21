@@ -31,25 +31,42 @@ function triviaQuestionGenerator(question, id, correctanswer, answertwo, answert
     this.getAnswers = function () {
         var newTriviaAnswers = $("<div class='trivia-answer-tile' id='" + this.id + "'>");
 
-        var ans1 = $('<button class="correct-guess">' + this.correctanswer + '</button>')
-        ans1.on("click", guess);
-        $(newTriviaAnswers).append(ans1);
+        var answers = [this.correctanswer, this.answertwo, this.answerthree, this.answerfour];
 
-        var ans2 = $('<button>' + this.answertwo + '</button>')
-        ans2.on("click", guess);
-        $(newTriviaAnswers).append(ans2);
+        answers = shuffle(answers);
 
-        var ans3 = $('<button>' + this.answerthree + '</button>')
-        ans3.on("click", guess);
-        $(newTriviaAnswers).append(ans3);
-
-        var ans4 = $('<button>' + this.answerfour + '</button>')
-        ans4.on("click", guess);
-        $(newTriviaAnswers).append(ans4);
-
+        for (var j = 0; j < answers.length; j++) {
+            var answer = answers[j];
+            if (answer === this.correctanswer) {
+            var ans1 = $('<button class="correct-guess">' + answer + '</button>')
+            } else {
+                var ans1 = $('<button>' + answer + '</button>')
+            }
+            ans1.on("click", guess);
+            $(newTriviaAnswers).append(ans1);
+        }
         return newTriviaAnswers;
     }
 }
+
+function shuffle(array) {
+    var currentIndex = array.length, temporaryValue, randomIndex;
+  
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
+  
+      // Pick a remaining element...
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+  
+      // And swap it with the current element.
+      temporaryValue = array[currentIndex];
+      array[currentIndex] = array[randomIndex];
+      array[randomIndex] = temporaryValue;
+    }
+  
+    return array;
+  }
 
 
 
@@ -133,7 +150,7 @@ function triviaGameReset() {
 function newQuestion(e) {
     timer = 10;
     $(".start-button").hide();
-    $(".trivia-game-answers").removeClass("show-answer");    
+    $(".trivia-game-answers").removeClass("show-answer");
     clearInterval(interval);
     if (triviaGameQuestions.length <= 0) {
         $(".trivia-game-question").empty();
@@ -163,13 +180,13 @@ function guess(e) {
     if (triviaQuestionChosen.correctanswer === e.currentTarget.innerHTML) {
         correctAnswers += 1;
         $(".correct").text("Correct: " + correctAnswers);
-    } else{
+    } else {
         $(e.currentTarget).addClass("incorrect-guess");
         incorrectAnswers += 1;
         $(".incorrect").text("Incorrect: " + incorrectAnswers);
     }
     $(".trivia-game-answers").addClass("show-answer");
-    clearInterval(interval);    
+    clearInterval(interval);
     setTimeout(newQuestion, 2000);
 }
 
